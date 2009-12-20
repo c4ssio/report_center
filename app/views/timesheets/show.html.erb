@@ -1,0 +1,18 @@
+<p>
+  <b>Log date:</b>
+  <%=h @timesheet.log_date %>
+</p>
+
+<p>
+  <b>Hours spent:</b>
+  <%=h @timesheet.hours_spent %>
+</p>
+
+<p>
+  <b>Employee:</b>
+  <%=h @timesheet.employee_id %>
+</p>
+
+
+<%= link_to 'Edit', edit_timesheet_path(@timesheet) %> |
+<%= link_to 'Back', timesheets_path %>

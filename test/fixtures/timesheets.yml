@@ -1,0 +1,11 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  log_date: 2009-12-20 11:05:51
+  hours_spent: 1
+  employee_id: 1
+
+two:
+  log_date: 2009-12-20 11:05:51
+  hours_spent: 1
+  employee_id: 1
