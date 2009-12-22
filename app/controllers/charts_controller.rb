@@ -1,7 +1,7 @@
 class ChartsController < ApplicationController
 
   def index
-    1.ch.create_file
+    headers["content-type"]="text/html"
   end
 
 end

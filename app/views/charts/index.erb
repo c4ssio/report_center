@@ -1,1 +1,12 @@
-<img src="images/test.png">
+
+<%
+# The xml is obtained as a string from builder template.
+#str_xml = render :file=>'charts/chart_data.builder'
+#str_xml='<graph numberSuffix=" hrs." yAxisName="Hours Spent" caption="Time Tracker Chart" showValues="1" subcaption="For Employee John Wilson" formatNumberScale="0" xAxisName="Day"><set name="Mon" value="8" color="AFD8F8"/><set name="Tue" value="6" color="F6BD0F"/><set name="Wed" value="5" color="8BBA00"/><set name="Thu" value="9" color="A66EDD"/><set name="Fri" value="9" color="F984A1"/><set name="Sat" value="8" color="CCCC00"/></graph>'
+str_xml = render :file=>'charts/chart_data'
+#save xml string as file
+File.open(Rails.root.to_s + '/public/data/chart_data.xml',"w") {|f| f.write(str_xml) }
+#Create the chart - Column 3D Chart with data from strXML
+render_chart '/FusionCharts/FCF_MSColumn3D.swf' , '/data/chart_data.xml' , '', 'Chart' ,  650 ,  400 ,  false ,  false do -%>
+
+<%  end -%>
