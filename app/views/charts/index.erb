@@ -1,12 +1,273 @@
+<table width="960" align="center" cellpadding="0" cellspacing="0" border="0" background="images/PageBg.jpg">
+  <tr height="70">
+    <td width="33">
+      &nbsp;
+    </td>
+    <td align="left" valign="bottom">
+    </td>
 
-<%
-# The xml is obtained as a string from builder template.
-#str_xml = render :file=>'charts/chart_data.builder'
-#str_xml='<graph numberSuffix=" hrs." yAxisName="Hours Spent" caption="Time Tracker Chart" showValues="1" subcaption="For Employee John Wilson" formatNumberScale="0" xAxisName="Day"><set name="Mon" value="8" color="AFD8F8"/><set name="Tue" value="6" color="F6BD0F"/><set name="Wed" value="5" color="8BBA00"/><set name="Thu" value="9" color="A66EDD"/><set name="Fri" value="9" color="F984A1"/><set name="Sat" value="8" color="CCCC00"/></graph>'
-str_xml = render :file=>'charts/chart_data'
-#save xml string as file
-File.open(Rails.root.to_s + '/public/data/chart_data.xml',"w") {|f| f.write(str_xml) }
-#Create the chart - Column 3D Chart with data from strXML
-render_chart '/FusionCharts/FCF_MSColumn3D.swf' , '/data/chart_data.xml' , '', 'Chart' ,  650 ,  400 ,  false ,  false do -%>
+    <td align="right" valign="bottom">
+    </td>
+    <td width="37">
+      &nbsp;
+    </td>
+  </tr>
 
-<%  end -%>
+  <tr>
+    <td width="33">
+    </td>
+
+    <td height="1" colspan="2" bgColor="#EEEEEE">
+    </td>
+    <td width="37">
+    </td>
+  </tr>
+
+  <!-- Code to render the form for year selection and animation selection -->
+  <tr>
+    <td width="33">
+    </td>
+    <td height="1" colspan="2" bgColor="#FFFFFF">
+
+    </td>
+    <td width="37">
+    </td>
+  </tr>
+  <tr height="30">
+    <td width="33">
+    </td>
+    <td height="22" colspan="2" align="center" bgColor="#EEEEEE" valign="middle">
+  <nobr>
+    <span class="textbolddark">Select Year: </span>
+
+    <input type='radio' name='Year' value='1994'><span class='text'>1994</span><input type='radio' name='Year' value='1995'><span class='text'>1995</span><input type='radio' name='Year' value='1996' checked><span class='text'>1996</span>
+    <span class="textbolddark"><span class='text'>&nbsp;&nbsp;&nbsp;</span>Animate Charts: </span>
+
+    <input type="radio" name="animate" value="1" checked><span class="text">Yes</span>
+    <input type="radio" name="animate" value="0"><span class="text">No</span>
+
+    <span class='text'>&nbsp;&nbsp;</span>
+    <input type="submit" class="button" value="Go" id="submit" 1 name="submit" 1>
+
+
+  </nobr>
+</td>
+<td width="37">
+</td>
+</tr>
+<tr>
+  <td width="33">
+  </td>
+  <td height="1" colspan="2" bgColor="#FFFFFF">
+  </td>
+  <td width="37">
+  </td>
+
+</tr>
+
+<tr>
+  <td width="33">
+  </td>
+  <td height="1" colspan="2" bgColor="#EEEEEE">
+  </td>
+  <td width="37">
+  </td>
+</tr>
+<!-- End code to render form -->
+
+<tr>
+
+  <td height="10" colspan="4">
+  </td>
+</tr>
+
+<tr>
+  <td width="33">
+  </td>
+  <td colspan="2">
+
+    <a name='start' />
+    <table width="875" align="center" cellspacing="0" cellpadding="0">
+      <tr>
+
+        <td align="left" width="500">
+          <%render_chart '/FusionCharts/FCF_MSColumn3D.swf' , '/data/product_usage.xml' , '', 'ProductUsage' ,  450 ,  325 ,  false ,  false do -%>
+          <%  end -%>
+        </td>
+        <td width="3">
+
+        </td>
+        <td valign="top" style="Border-left:#EEEEEE 1px solid;">
+          <table width="90%" align="right">
+            <tr>
+              <td>
+                <!--insert top right chart here-->
+
+              </td>
+            </tr>
+            <tr>
+              <td valign="top">
+                <table width="100%" align="center" cellpadding="0" cellspacing="0">
+                  <tr>
+                    <td background="Images/orangeTab.gif" colspan="3" align="left" height="26" width="405">
+                      <span class="textBoldDark">
+                        &nbsp;&nbsp; More Charts...
+                      </span>
+
+                    </td>
+                    <td>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td height="5">
+                    </td>
+                  </tr>
+                  <tr height="27">
+
+                    <td width="127" align="center" valign="bottom" height="27">
+                      <a href="#start"><img src="Images/btnTopIndicators.jpg" border="0" onClick="openNewWindow('Chart_TopIndicators.asp','chart_topI','status=yes,scrollbars=yes,resizable=yes,width=1000,height=700');" alt="My Top Selected Indicators in Charts" WIDTH="126" HEIGHT="27"></a>
+                    </td>
+                    <td width="131" align="center" valign="bottom" height="27">
+                      <a href="#start"><img src="Images/btnEmployee.jpg" border="0" onClick="openNewWindow('Chart_SalesByEmployee.asp','chart_employee','status=yes,scrollbars=yes,resizable=yes,width=1000,height=700');" alt="Sales By Employee" WIDTH="126" HEIGHT="27"></a>
+                    </td>
+                    <td align="left" valign="bottom" height="27">
+                      <a href="#start"><img src="Images/btnInventory.jpg" border="0" onClick="openNewWindow('Chart_InventoryByCat.asp','chart_inventory','status=yes,scrollbars=yes,resizable=yes,width=1000,height=700');" alt="Inventory By Categories" WIDTH="126" HEIGHT="27"></a>
+                    </td>
+                    <td>
+
+                    </td>
+                  </tr>
+
+                  <tr height="27">
+                    <td width="127" align="center" valign="top" height="27">
+                      <a href="#start"><img src="Images/btnSalesByCountry.jpg" border="0" onClick="openNewWindow('Chart_SalesByCountry.asp','chart_country','status=yes,scrollbars=yes,resizable=yes,width=1000,height=700');" alt="Sales By Country" height="27"></a>
+                    </td>
+                    <td width="131" align="center" valign="top" height="27">
+                      <a href="#start"><img src="Images/btnSalesByCat.jpg" border="0" onClick="openNewWindow('Chart_YearlySalesByCat.asp','chart_cat_cum','status=yes,scrollbars=yes,resizable=yes,width=1000,height=700');" alt="Sales By Categories (Cumulative)" height="27"></a>
+                    </td>
+                    <td align="left" valign="top" height="27">
+
+                      <a href="#start"><img src="Images/btnShipping.jpg" border="0" onClick="openNewWindow('Chart_ShippingDelay.asp','chart_shipping','status=yes,scrollbars=yes,resizable=yes,width=1000,height=700');" alt="Average delay in Shipping" height="27"></a>
+                    </td>
+                    <td>
+                    </td>
+                  </tr>
+
+                </table>
+              </td>
+            </tr>
+          </table>
+
+        </td>
+      </tr>
+    </table>
+
+    <!-- Some blank space between two charts -->
+    <table width="875" height="10">
+      <tr>
+        <td>
+        </td>
+      </tr>
+    </table>
+
+
+    <table width="875" align="center" cellpadding="0" cellspacing="0" border="0" style="Border-top:#EEEEEE 1px solid;">
+      <tr>
+        <td align="left" width="600">
+          <%render_chart '/FusionCharts/FCF_StackedColumn3D.swf' , '/data/weekly_top_pages.xml' , '', 'WeeklyTopPages' ,  600 ,  350 ,  false ,  false do -%>
+          <%end-%>
+        </td>
+        <td align="left" width="275">
+          <%render_chart '/FusionCharts/FCF_StackedColumn3D.swf' , '/data/client_page_users.xml' , '', 'ClientPageUsers' ,  275 ,  350 ,  false ,  false do -%>
+          <%end-%>
+
+        </td>
+      </tr>
+    </table>
+
+    <!-- Some blank space between two charts -->
+    <table width="875" height="10">
+      <tr>
+        <td>
+        </td>
+      </tr>
+    </table>
+
+    <table width="875" align="center" cellpadding="0" cellspacing="0" border="0" style="Border-top:#EEEEEE 1px solid;">
+      <tr>
+        <td align="left">
+
+          <!-- START Script Block for Chart SalesByProd -->
+          <div id='SalesByProdDiv' align='center'>
+		Chart.
+
+          </div>
+
+          <script type="text/javascript">
+            //Instantiate the Chart
+            var chart_SalesByProd = new FusionCharts("FusionCharts/MSColumn3DLineDY.swf?ChartNoDataText=Please select a product category in the above chart to see product-wise sales.", "SalesByProd", "875", "350", "0", "1");
+
+            //Provide entire XML data using dataXML method
+            chart_SalesByProd.setDataXML("<chart></chart>");
+
+            //Finally, render the chart.
+            chart_SalesByProd.render("SalesByProdDiv");
+          </script>
+          <!-- END Script Block for Chart SalesByProd -->
+
+
+        </td>
+      </tr>
+    </table>
+
+
+    <br>
+  </td>
+  <td width="37">
+    &nbsp;
+  </td>
+
+</tr>
+
+<tr>
+  <td width="33">
+  </td>
+  <td height="1" colspan="2" bgColor="#EEEEEE">
+  </td>
+  <td width="37">
+  </td>
+</tr>
+
+<tr>
+
+  <td height="4" colspan="4">
+  </td>
+</tr>
+
+<tr>
+  <td width="33">
+  </td>
+  <td colspan="2" align="center">
+    <span class="text">This application was built using <a href="http://www.InfoSoftGlobal.com/FusionCharts" target="_blank"><b>FusionCharts v3</b></a> - &quot;Animated flash charts for the web&quot;.</span>
+
+  </td>
+  <td width="33">
+  </td>
+</tr>
+
+<tr>
+  <td width="33">
+  </td>
+  <td colspan="2" align="center">
+    <span class="text">© All Rights Reserved</span>
+
+  </td>
+  <td width="33">
+  </td>
+</tr>
+
+<tr>
+  <td height="4" colspan="4">
+  </td>
+</tr>
+</table>

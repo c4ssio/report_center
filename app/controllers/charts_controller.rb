@@ -1,7 +1,8 @@
 class ChartsController < ApplicationController
 
   def index
-    headers["content-type"]="text/html"
+    #generate variables for first xml file
+
   end
 
 end

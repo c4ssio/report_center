@@ -1,0 +1,37 @@
+<graph showAlternateHGridColor="1" bgcolor="F3f3f3"
+caption="Product Usage Last 4 Periods" xAxisName="Period"
+alternateHGridColor="f8f8f8" bgAlpha="70" yAxisName="Page Hits"
+alternateHGridAlpha="60" showColumnShadow="1" showValues="0"
+divlinecolor="c5c5c5" numberPrefix="" divLineAlpha="60"
+decimalPrecision="0">
+    <categories font="Arial" fontSize="11" fontColor="000000">
+        <category name="Period 1"/>
+        <category name="Period 2"/>
+        <category name="Period 3"/>
+        <category name="Period 4"/>
+    </categories>
+    <dataset seriesname="product 1" color="0066CC">
+        <set value="326177"/>
+        <set value="261202"/>
+        <set value="345804"/>
+        <set value="356993"/>
+    </dataset>
+    <dataset seriesname="product 2" color="FFFF00">
+        <set value="37318"/>
+        <set value="36784"/>
+        <set value="39441"/>
+        <set value="39299"/>
+    </dataset>
+    <dataset seriesname="product 3" color="33FF00">
+        <set value="13977"/>
+        <set value="14431"/>
+        <set value="18657"/>
+        <set value="17105"/>
+    </dataset>
+    <dataset seriesname="product 4" color="CC0033">
+        <set value="10000"/>
+        <set value="11500"/>
+        <set value="12500"/>
+        <set value="15000"/>
+    </dataset>
+</graph>

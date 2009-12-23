@@ -1,0 +1,44 @@
+<graph xaxisname='Months' yaxisname='Page Hits' caption='Weekly Top Pages' lineThickness='1' animation='1' showNames='1' alpha='100' showLimits='1' decimalPrecision='1' rotateNames='1' numDivLines='3' limitsDecimalPrecision='0' showValues='0'>
+   <categories>
+      <category name='Page 1' showname='1' />
+      <category name='Page 2' showname='1' />
+      <category name='Page 3' showname='1' />
+      <category name='Page 4' showname='1' />
+      <category name='Page 5' showname='1' />
+   </categories>
+   <dataset seriesName='Client 1' color='0080C0'>
+      <set value='810' alpha='100' />
+      <set value='930' alpha='100' />
+      <set value='1110' alpha='100' />
+      <set value='1300' alpha='100' />
+      <set value='1890' alpha='100' />
+   </dataset>
+   <dataset seriesName='Client 2' color='008040'>
+      <set value='380' alpha='100' />
+      <set value='390' alpha='100' />
+      <set value='420' alpha='100' />
+      <set value='490' alpha='100' />
+      <set value='900' alpha='100' />
+   </dataset>
+   <dataset seriesName='Client 3' color='FFFF00'>
+      <set value='220' alpha='100' />
+      <set value='240' alpha='100' />
+      <set value='280' alpha='100' />
+      <set value='350' alpha='100' />
+      <set value='580' alpha='100' />
+   </dataset>
+   <dataset seriesName='Client 4' color='800080'>
+      <set value='20' alpha='100' />
+      <set value='50' alpha='100' />
+      <set value='50' alpha='100' />
+      <set value='60' alpha='100' />
+      <set value='60' alpha='100' />
+   </dataset>
+   <dataset seriesName='Client 5' color='EB59CB'>
+      <set value='10' alpha='100' />
+      <set value='10' alpha='100' />
+      <set value='20' alpha='100' />
+      <set value='20' alpha='100' />
+      <set value='20' alpha='100' />
+   </dataset>
+</graph>

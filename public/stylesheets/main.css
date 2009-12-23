@@ -1,17 +1,63 @@
-/* 
-    Document   : main
-    Created on : Dec 18, 2009, 11:04:01 AM
-    Author     : cpaesleme
-    Description:
-        Purpose of the stylesheet follows.
-*/
-
-/* 
-   TODO customize this sample style
-   Syntax recommendation http://www.w3.org/TR/REC-CSS2/
-*/
-
-root { 
-    display: block;
+.trdark {
+BACKGROUND-COLOR:#B0BF9D;
 }
+.trlight {
+BACKGROUND-COLOR:#F2F2F2;
+}
+.trmid {
+BACKGROUND-COLOR:#EFEFDF;
+}
+.tableWithBorder {
+Border:1px #999999 solid;
+}
+.text
+{
+FONT-SIZE: 9pt;
+COLOR: black;
 
+}
+.textbolddark
+{
+FONT-SIZE: 9pt;
+COLOR: black;
+
+FONT-WEIGHT:bolder;
+}
+.textboldlight
+{
+FONT-SIZE: 9pt;
+COLOR: white;
+
+FONT-WEIGHT:bolder;
+}
+A:hover
+{
+COLOR:#FFC20F;
+}
+A
+{
+FONT-SIZE: 9pt;
+COLOR: black;
+
+
+TEXT-DECORATION:none;
+}
+.select
+{
+FONT-SIZE: 9pt;
+COLOR: black;
+
+
+TEXT-DECORATION:none;
+BACKGROUND-COLOR:#F2F2F2;
+}
+.button
+{
+FONT-SIZE: 9pt;
+HEIGHT:20px;
+COLOR: black;
+
+
+TEXT-DECORATION:none;
+BACKGROUND-COLOR:#F2F2F2;
+}

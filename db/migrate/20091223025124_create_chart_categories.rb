@@ -1,6 +1,6 @@
-class CreateChartSeries < ActiveRecord::Migration
+class CreateChartCategories < ActiveRecord::Migration
   def self.up
-    create_table :chart_series do |t|
+    create_table :chart_categories do |t|
       t.integer :chart_id
       t.string :name
       t.integer :order
@@ -9,6 +9,6 @@ class CreateChartSeries < ActiveRecord::Migration
   end
 
   def self.down
-    drop_table :chart_series
+    drop_table :chart_categories
   end
 end
