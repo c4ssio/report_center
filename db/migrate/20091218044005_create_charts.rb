@@ -1,8 +1,8 @@
 class CreateCharts < ActiveRecord::Migration
   def self.up
     create_table :charts do |t|
+      t.integer :sql_query_id
       t.string :name
-      t.date :effective_date
       t.timestamps
     end
   end

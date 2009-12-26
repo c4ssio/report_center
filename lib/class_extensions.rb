@@ -19,4 +19,3 @@ class Fixnum
     return ChartLabel.find(self)
   end
 end
-

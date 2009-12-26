@@ -2,19 +2,19 @@
    <categories>
       <category name='Client 1' showName='1' />
    </categories>
-   <dataset seriesName='User 1' color='0080C0'>
+   <dataset seriesName='User 1' color='0066CC'>
       <set value='810' alpha='100' />
    </dataset>
-   <dataset seriesName='User 2' color='008040'>
+   <dataset seriesName='User 2' color='3384D6'>
       <set value='380' alpha='100' />
    </dataset>
-   <dataset seriesName='User 3' color='FFFF00'>
+   <dataset seriesName='User 3' color='66A3E0'>
       <set value='220' alpha='100' />
    </dataset>
-   <dataset seriesName='User 4' color='800080'>
+   <dataset seriesName='User 4' color='99C1EA'>
       <set value='20' alpha='100' />
    </dataset>
-   <dataset seriesName='User 5' color='EB59CB'>
+   <dataset seriesName='User 5' color='CCE0F4'>
       <set value='10' alpha='100' />
    </dataset>
 </graph>

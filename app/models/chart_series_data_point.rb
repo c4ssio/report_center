@@ -2,7 +2,6 @@ class ChartSeriesDataPoint < ActiveRecord::Base
   belongs_to :chart_series
   has_many :options,:class_name=>'ChartSeriesDataPointOption' do
         def add(args)
-      raise "Expected: Hash" unless args.class==Hash
       opt = nil
       args.each do |k,v|
         #try to find an option with this
@@ -19,8 +18,6 @@ class ChartSeriesDataPoint < ActiveRecord::Base
       opt
     end
     def remove(name)
-      raise "Expected: Symbol or String" unless [
-        Symbol,String].include?(name.class)
       opt = self.find_by_name(name.to_s.downcase)
       opt.delete
       self

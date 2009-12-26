@@ -1,3 +1,12 @@
+<%
+#generate file name for temporary storage
+@charts.each do |ch|
+  File.open(Rails.root.to_s + "/public/data/" + ch.name + ".xml","w") {|f|
+    f.write(ch.to_fcxml)
+  }
+end
+%>
+
 <table width="960" align="center" cellpadding="0" cellspacing="0" border="0" background="images/PageBg.jpg">
   <tr height="70">
     <td width="33">
@@ -91,7 +100,7 @@
       <tr>
 
         <td align="left" width="500">
-          <%render_chart '/FusionCharts/FCF_MSColumn3D.swf' , '/data/product_usage.xml' , '', 'ProductUsage' ,  450 ,  325 ,  false ,  false do -%>
+          <%render_chart '/FusionCharts/FCF_MSColumn3D.swf' , '/data/product_page_hits_by_period.xml' , '', 'ProductUsage' ,  450 ,  325 ,  false ,  false do -%>
           <%  end -%>
         </td>
         <td width="3">

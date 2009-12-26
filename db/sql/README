@@ -1,0 +1,3 @@
+sqls in here should consist of 3 columns - Series, Category, and Data Point
+They should be ordered by those 3 columns as well.
+These will be used when generating charts.

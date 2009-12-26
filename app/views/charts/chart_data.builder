@@ -1,43 +1,32 @@
 xml = Builder::XmlMarkup.new(:indent=>0)
-
-options = {
-  :caption=>'Business Results 2005 v 2006',
-  :xAxisName=>'Month',
-  :yAxisName=>'Revenue',
-  :showValues=>'0',
-  :numberPrefix=>'$',
-  :decimalPrecision=>'0',
-  :bgcolor=>'F3f3f3',
-  :bgAlpha=>'70',
-  :showColumnShadow=>'1',
-  :divlinecolor=>'c5c5c5',
-  :divLineAlpha=>'60',
-  :showAlternateHGridColor=>'1',
-  :alternateHGridColor=>'f8f8f8',
-  :alternateHGridAlpha=>'60'
+graph_options=Hash.new
+@chart.options.each{|cho|
+  graph_options[cho.name.to_sym] = cho.value.to_s
 }
-
-data = {
-  :'2006' => ['27400','29800','25800','26800','29600'],
-  :'2005' => ['10000','11500','12500','15000','11000']
-}
-
-categories = ['Jan','Feb','Mar','Apr','May']
-
-xml.graph(options) do
-  xml.categories(:font => "Arial", :fontSize => "11", :fontColor => "000000") do
-  categories.each do |c|
-    category_name = c
-      xml.category(:name => category_name)
+xml.graph(graph_options) do
+  category_options=Hash.new
+  @chart.categories.each{|c|
+    c.options.each do |co|
+      category_options[co.name.to_sym]=co.value.to_s
     end
+  xml.categories do
+    xml.category(category_options)
   end
-
-  data.each do |k,v|
-    series_name = k.to_s
-    xml.dataset(:seriesname => series_name, :color => ''+get_FC_color) do
-      v.each do |p|
-        xml.set(:value => p)
-      end
+  }
+  
+  @chart.series.each do |s|
+    dataset_options=Hash.new
+    s.options.each{|so|
+      dataset_options[so.name.to_sym]=so.value.to_s
+    }
+    xml.dataset(dataset_options) do
+      set_options=Hash.new
+      s.data_points.each{|dp|
+        dp.options.each do |dpo|
+          set_options[dpo.name.to_sym]=dpo.value.to_s
+        end
+      xml.set(set_options)
+      }      
     end
   end
 end
