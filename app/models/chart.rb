@@ -1,6 +1,9 @@
 class Chart < ActiveRecord::Base
   belongs_to :sql_query
   has_many :sql_params, :class_name=>'ChartSqlQueryParameter'
+  belongs_to :parent, :class_name=>'Chart', :foreign_key=>:parent_id
+  has_many :children, :class_name=>'Chart', :foreign_key=>:parent_id
+
   has_many :series, :class_name=>'ChartSeries' do
     def add_or_reorder(string_array)
       #this method reorders members m of the series by matching to
@@ -11,6 +14,7 @@ class Chart < ActiveRecord::Base
         if s_m
           #reorder found series member
           s_m.order=s_i+1
+          s_m.save!
         else
           #create a series and option at this position
           self.create(:name=>s,:order=>s_i+1).options.create(
@@ -30,29 +34,6 @@ class Chart < ActiveRecord::Base
         r_m_i+=1
       end
     end
-    def add(args)
-      args=Array(args)
-      new_member = nil
-      args.each do |s|
-        #ignore if already exists
-        new_member=self.find_by_name(s.to_s.underscore)
-        unless new_member
-          #find last one's order and increment 1
-          new_order = (self.empty? ? 1 : self.last.order+1)
-          new_member = self.create(:name=>s.to_s.underscore,:order=>new_order)
-          new_member.options.add(:seriesname=>s.to_s)
-        end
-      end
-      new_member
-    end
-    def remove(name)
-      ch_s = self.find_by_name(name.to_s.underscore)
-      ch_s_order = ch_s.order
-      ch_s.delete
-      #decrement all after it
-      self.select{|c| c.order>ch_s_order}.each{|sa| sa.order-=1;sa.save!}
-      self
-    end
   end
 
   has_many :categories, :class_name=>'ChartCategory' do
@@ -65,6 +46,7 @@ class Chart < ActiveRecord::Base
         if c_m
           #reorder found category member
           c_m.order=c_i+1
+          c_m.save!
         else
           #create a category and option at this position
           self.create(:name=>s,:order=>c_i+1
@@ -84,54 +66,46 @@ class Chart < ActiveRecord::Base
         r_m_i+=1
       end
     end
-
-    def add(args)
-      args=Array(args)
-      new_member = nil
-      args.each do |c|
-        #ignore if already exists
-        new_member = self.find_by_name(c.to_s.downcase)
-        unless new_member
-          #find last one's order and increment 1
-          new_order = (self.empty? ? 1 : self.last.order+1)
-          new_member = self.create(:name=>c.to_s.underscore,:order=>new_order)
-          new_member.options.add(:name=>c.to_s)
-        end
-      end
-      new_member
-    end
-    def remove(name)
-      ch_cat = self.find_by_name(name.to_s.underscore)
-      ch_cat_order = ch_cat.order
-      ch_cat.delete
-      #decrement all after it
-      self.select{|c| c.order>ch_cat_order}.each{|ca| ca.order-=1;ca.save!}
-      self
-    end
   end
 
   has_many :options, :class_name=>'ChartOption' do
-    def add(args)
-      opt = nil
-      args.each do |k,v|
-        #try to find an option with this
-        opt = self.find_by_name(k.to_s.downcase)
-        if opt
-          #if found, replace with new value
-          opt.value = v.to_s
-          opt.save!
+    def create_or_update_by_name_and_value(name,value)
+      o=self.find_or_create_by_name(name)
+      o.value=value
+      o.save!
+    end
+  end
+
+  after_create :add_default_options
+
+  def add_default_options
+    #default chart options
+    #(should be moved to the database once we define
+    #methods for a "default chart"
+    {:xaxisname=>'', :yaxisname=>'',
+      :caption=>'',:lineThickness=>'1', :animation=>'1',
+      :showNames=>'1', :alpha=>'100',:showLimits=>'1', :decimalPrecision=>'1',
+      :rotateNames=>'1', :numDivLines=>'3',:limitsDecimalPrecision=>'0',
+      :showValues=>'0'}.each do |n,v|
+      self.options.find_or_create_by_name_and_value(n.to_s,v)
+    end
+  end
+
+  def add_color_scheme(cs_name)
+    cs = ColorScheme.find_by_name(cs_name)
+    #takes a color scheme and applies all members to its series in order
+    color_array = cs.items.collect(&:hex_code)
+    c_i = 0
+      self.series.each do |s|
+        #if the series is named "other," skips it and applies a gray pattern
+        if s.name=='other'
+          new_color = 'C0C0C0' 
         else
-          #otherwise, create the option
-          opt=self.create(:name=>k.to_s.downcase,:value=>v.to_s)
+          new_color = color_array[c_i]
+          c_i+=1
         end
+        s.options.create_or_update_by_name_and_value('color',new_color)
       end
-      opt
-    end
-    def remove(name)
-      opt = self.find_by_name(name.to_s.downcase)
-      opt.delete
-      self
-    end
   end
 
   def load_from_sql
@@ -145,12 +119,13 @@ class Chart < ActiveRecord::Base
     sql_str = File.open(
       "#{Rails.root}/db/sql/#{self.sql_query.name}.sql",'r').read
     #replace sql string parameters
+    
     self.sql_params.each do |sqlp|
       sql_str.gsub!("@#{sqlp.name}",
         sqlp.text_value ? "'#{sqlp.text_value}'" : sqlp.number_value.to_s
       )
     end
-    result = ActiveRecord::Base.connection.execute(sql_str)
+    result = SqlQuery.execute(sql_str)
     #feed result set into 2d array, with
     #series, category, data point as columns
     data_array = Array.new
@@ -182,7 +157,6 @@ class Chart < ActiveRecord::Base
       data_hash[series_name][category_name] = dp[2]
       prior_series_name = series_name
     end
-    
     #iterate through categories and series and ensure that
     #all combinations are accounted for; those that are not
     #found in the hash are created and given zero values
@@ -209,11 +183,13 @@ class Chart < ActiveRecord::Base
         )
         new_dp.save!
         d_i+=1
-      end
+      end if data_hash[s.name]
     end
   end
 
   def to_fcxml
+    #generates xml file for the chart and saves its data in the data
+    #folder
     xml = Builder::XmlMarkup.new(:indent=>0)
     graph_options=Hash.new
     self.options.each{|cho|
@@ -222,12 +198,12 @@ class Chart < ActiveRecord::Base
     xml.graph(graph_options) do
       category_options=Hash.new
       xml.categories do
-      self.categories.sort_by(&:order).each{|c|
-        c.options.each do |co|
-          category_options[co.name.to_sym]=co.value.to_s
-        end
-        xml.category(category_options)
-      }
+        self.categories.sort_by(&:order).each{|c|
+          c.options.each do |co|
+            category_options[co.name.to_sym]=co.value.to_s
+          end
+          xml.category(category_options)
+        }
       end
       self.series.sort_by(&:order).each do |s|
         dataset_options=Hash.new
@@ -245,5 +221,9 @@ class Chart < ActiveRecord::Base
         end
       end
     end
+
+    File.open(Rails.root.to_s + "/public/data/" + self.name + ".xml","w") {|f|
+      f.write(xml.target!)
+    }
   end
 end
