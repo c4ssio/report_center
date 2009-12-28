@@ -73,7 +73,8 @@ pphbp_chart.series.each do |s|
         'client_page_hits_by_page_name')
       cphbpn_chart=
         cphbpn_sql.charts.find_or_create_by_name_and_parent_id(
-        "#{cphbpn_sql.name}_#{s.name}_#{c.name}_#{ch_i.to_s}",pphbp_chart.id)
+        "#{cphbpn_sql.name}_#{s.name.underscore_all
+        }_#{c.name.underscore_all}_#{ch_i.to_s}",pphbp_chart.id)
       #add parent parameters as well as series, category, rank specific
       {
         :period_1_start_date=>'2009-04-01',

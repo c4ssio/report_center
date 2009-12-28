@@ -19,3 +19,10 @@ class Fixnum
     return ChartLabel.find(self)
   end
 end
+class String
+  def underscore_all
+    #overrides underscore behavior
+    #and underscores spaces in front of numbers too
+    underscore.gsub(' ','_')
+  end
+end

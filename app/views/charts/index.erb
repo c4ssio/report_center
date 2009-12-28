@@ -91,8 +91,10 @@
       <tr>
 
         <td align="left" width="500">
-          <%render_chart '/FusionCharts/FCF_MSColumn3D.swf' , '/data/product_page_hits_by_period.xml' , '', 'ProductUsage' ,  450 ,  325 ,  false ,  false do -%>
-          <%  end -%>
+          <%render_chart '/FusionCharts/FCF_MSColumn3D.swf' ,
+            '/data/product_page_hits_by_period.xml' , '',
+            'product_page_hits_by_period' ,
+            450 ,  325 ,  false ,  false do;end -%>
         </td>
         <td width="3">
 
@@ -175,26 +177,15 @@
       <tr><td width="790" colspan="6"align="center">Client Page Hits, Top 5 Pages</td></tr>
       <tr>
         <td width="20"></td>
+        <%(1..5).each do |n|%>
         <td width="110">
-          <%render_chart '/FusionCharts/FCF_StackedColumn3D.swf' , '/data/client_page_hits_by_page_name_product 1_period 1_1.xml' , '', 'WeeklyTopPages_1' ,  120 ,  370 ,  false ,  false do -%>
-          <%end-%>
+          <%render_chart '/FusionCharts/FCF_StackedColumn3D.swf' , 
+            "/data/client_page_hits_by_page_name_product_1_period_1_#{
+            n.to_s}.xml" , '',
+            "product_page_hits_by_period_child_#{n.to_s}" ,  
+            120 ,  370 , false ,  false do;end -%>
         </td>
-        <td width="110">
-          <%render_chart '/FusionCharts/FCF_StackedColumn3D.swf' , '/data/client_page_hits_by_page_name_product 1_period 1_2.xml' , '', 'WeeklyTopPages_2' ,  120 ,  370 ,  false ,  false do -%>
-          <%end-%>
-        </td>
-        <td width="110">
-          <%render_chart '/FusionCharts/FCF_StackedColumn3D.swf' , '/data/client_page_hits_by_page_name_product 1_period 1_3.xml' , '', 'WeeklyTopPages_3' ,  120 ,  370 ,  false ,  false do -%>
-          <%end-%>
-        </td>
-        <td width="110">
-          <%render_chart '/FusionCharts/FCF_StackedColumn3D.swf' , '/data/client_page_hits_by_page_name_product 1_period 1_4.xml' , '', 'WeeklyTopPages_4' ,  120 ,  370 ,  false ,  false do -%>
-          <%end-%>
-        </td>
-        <td width="110">
-          <%render_chart '/FusionCharts/FCF_StackedColumn3D.swf' , '/data/client_page_hits_by_page_name_product 1_period 1_5.xml' , '', 'WeeklyTopPages_5' ,  120 ,  370 ,  false ,  false do -%>
-          <%end-%>
-        </td>
+        <%end%>
         <td width="110">
         </td>
       </tr>
@@ -217,20 +208,7 @@
 		Chart.
 
           </div>
-
-          <script type="text/javascript">
-            //Instantiate the Chart
-            var chart_SalesByProd = new FusionCharts("FusionCharts/MSColumn3DLineDY.swf?ChartNoDataText=Please select a product category in the above chart to see product-wise sales.", "SalesByProd", "875", "350", "0", "1");
-
-            //Provide entire XML data using dataXML method
-            chart_SalesByProd.setDataXML("<chart></chart>");
-
-            //Finally, render the chart.
-            chart_SalesByProd.render("SalesByProdDiv");
-          </script>
           <!-- END Script Block for Chart SalesByProd -->
-
-
         </td>
       </tr>
     </table>

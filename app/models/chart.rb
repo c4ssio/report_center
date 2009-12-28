@@ -190,6 +190,8 @@ class Chart < ActiveRecord::Base
   def to_fcxml
     #generates xml file for the chart and saves its data in the data
     #folder
+    sorted_categories=nil
+    sorted_series=nil
     xml = Builder::XmlMarkup.new(:indent=>0)
     graph_options=Hash.new
     self.options.each{|cho|
@@ -198,7 +200,8 @@ class Chart < ActiveRecord::Base
     xml.graph(graph_options) do
       category_options=Hash.new
       xml.categories do
-        self.categories.sort_by(&:order).each{|c|
+        sorted_categories = self.categories.sort_by(&:order)
+        sorted_categories.each{|c|
           c.options.each do |co|
             category_options[co.name.to_sym]=co.value.to_s
           end
@@ -212,7 +215,13 @@ class Chart < ActiveRecord::Base
         }
         xml.dataset(dataset_options) do
           set_options=Hash.new
-          s.data_points.sort_by(&:order).each{|dp|
+          sorted_data = s.data_points.sort_by(&:order)
+          sorted_data.each{|dp|
+            d_i = sorted_data.index(dp)
+            #if the chart has children, links and parameters
+            #should be attached to the datapoints
+            set_options[:link]="javascript:getChildCharts('#{self.sql_query.name}','#{
+            s.name}','#{sorted_categories[d_i].name}');" unless self.children.empty?
             dp.options.each do |dpo|
               set_options[dpo.name.to_sym]=dpo.value.to_s
             end
@@ -226,4 +235,7 @@ class Chart < ActiveRecord::Base
       f.write(xml.target!)
     }
   end
+
+
+
 end
