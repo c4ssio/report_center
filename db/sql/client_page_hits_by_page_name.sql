@@ -44,6 +44,18 @@ WHEN @rank=5 THEN (SELECT * FROM pages_top_5_5 LIMIT 4,1)
 END page_name
 FROM DUAL) pg ON pg.page_name = CONCAT(ph.page_section,'/',ph.page_set)
 WHERE client_id>0
+AND
+CASE WHEN log_record_date>=@period_1_start_date AND log_record_date<@period_2_start_date THEN 'period 1'
+WHEN log_record_date>=@period_2_start_date AND log_record_date<@period_3_start_date THEN 'period 2'
+WHEN log_record_date>=@period_3_start_date AND log_record_date<@period_4_start_date THEN 'period 3'
+WHEN log_record_date>=@period_4_start_date AND log_record_date<@period_5_start_date THEN 'period 4'
+END = @category_name
+AND
+CASE WHEN log_record_product='professional' THEN 'product 1'
+WHEN log_record_product='monitor' THEN 'product 2'
+WHEN log_record_product='interface' THEN 'product 3'
+WHEN log_record_product='enterprise' THEN 'product 4'
+END = @series_name
 GROUP BY client_id, pg.page_name
 ORDER BY COUNT(*) DESC
 LIMIT 5;
@@ -63,6 +75,18 @@ WHEN @rank=5 THEN (SELECT * FROM pages_top_5_5 LIMIT 4,1)
 END page_name
 FROM DUAL) pg ON pg.page_name = CONCAT(ph.page_section,'/',ph.page_set)
 WHERE client_id>0
+AND
+CASE WHEN log_record_date>=@period_1_start_date AND log_record_date<@period_2_start_date THEN 'period 1'
+WHEN log_record_date>=@period_2_start_date AND log_record_date<@period_3_start_date THEN 'period 2'
+WHEN log_record_date>=@period_3_start_date AND log_record_date<@period_4_start_date THEN 'period 3'
+WHEN log_record_date>=@period_4_start_date AND log_record_date<@period_5_start_date THEN 'period 4'
+END = @category_name
+AND
+CASE WHEN log_record_product='professional' THEN 'product 1'
+WHEN log_record_product='monitor' THEN 'product 2'
+WHEN log_record_product='interface' THEN 'product 3'
+WHEN log_record_product='enterprise' THEN 'product 4'
+END = @series_name
 GROUP BY client_id, pg.page_name
 ORDER BY COUNT(*) DESC
 LIMIT 6,999999999) tp;

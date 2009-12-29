@@ -2,7 +2,13 @@ class Chart < ActiveRecord::Base
   belongs_to :sql_query
   has_many :sql_params, :class_name=>'ChartSqlQueryParameter'
   belongs_to :parent, :class_name=>'Chart', :foreign_key=>:parent_id
-  has_many :children, :class_name=>'Chart', :foreign_key=>:parent_id
+  has_many :children, :class_name=>'Chart', :foreign_key=>:parent_id do
+    def find_by_params(args)
+        self.select{|ch|
+        !args.collect{|n,v| ch.sql_params.find_by_name_and_text_value(n.to_s,v.to_s)}.include?(nil)
+        }
+    end
+  end
 
   has_many :series, :class_name=>'ChartSeries' do
     def add_or_reorder(string_array)
@@ -76,9 +82,9 @@ class Chart < ActiveRecord::Base
     end
   end
 
-  after_create :add_default_options
+  after_create :add_defaults
 
-  def add_default_options
+  def add_defaults
     #default chart options
     #(should be moved to the database once we define
     #methods for a "default chart"
@@ -191,7 +197,7 @@ class Chart < ActiveRecord::Base
     #generates xml file for the chart and saves its data in the data
     #folder
     sorted_categories=nil
-    sorted_series=nil
+    sorted_data=nil
     xml = Builder::XmlMarkup.new(:indent=>0)
     graph_options=Hash.new
     self.options.each{|cho|
@@ -220,8 +226,8 @@ class Chart < ActiveRecord::Base
             d_i = sorted_data.index(dp)
             #if the chart has children, links and parameters
             #should be attached to the datapoints
-            set_options[:link]="javascript:getChildCharts('#{self.sql_query.name}','#{
-            s.name}','#{sorted_categories[d_i].name}');" unless self.children.empty?
+            set_options[:link]="javascript:getChildren('#{self.id}','#{
+            self.name}','#{s.name}','#{sorted_categories[d_i].name}');" unless self.children.empty?
             dp.options.each do |dpo|
               set_options[dpo.name.to_sym]=dpo.value.to_s
             end
@@ -231,9 +237,12 @@ class Chart < ActiveRecord::Base
       end
     end
 
-    File.open(Rails.root.to_s + "/public/data/" + self.name + ".xml","w") {|f|
+    chart_url = "/data/#{self.sql_query.name}/#{self.name}.xml"
+    File.open("#{Rails.root.to_s}/public#{chart_url}","w") {|f|
       f.write(xml.target!)
     }
+    #return chart URL for use in chart paths
+    chart_url
   end
 
 

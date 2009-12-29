@@ -4,23 +4,6 @@ pphbp_cs = ColorScheme.find_or_create_by_name('blue_green_yellow_purple')
   pphbp_cs.items.find_or_create_by_hex_code(h)
 end
 
-#client page hits by page name color scheme array
-cphbpn_csa=Array.new
-
-#other schemes added name value style
-{
-  'blue_gradient_5'=>['06266F','2A4480','1240AB','4671D5','6C8CD5'],
-  'teal_gradient_5'=>['00665E','1D766F','009D91','33CEC3','5DCEC6'],
-  'green_gradient_5'=>['008110','259433','00C618','39E24D','6EE275'],
-  'orange_gradient_5'=>['A63600','BF5E30','FF5300','FF7E40','FFA073'],
-  'purple_gradient_5'=>['6C006C','7C1F7C','A600A6','D235D2','D25FD2']
-}.each do |n,ha|
-  cs=ColorScheme.find_or_create_by_name(n)
-  cphbpn_csa<<cs.name
-  ha.each do |h|
-    cs.items.find_or_create_by_hex_code(h)
-  end
-end
 
 #Product Page Hits By Period
 #generate query and parameters
@@ -65,16 +48,17 @@ end
 #Client Page Hits by Page Name
 #(generates 5 charts for each cat/series of pphbp)
 
+cphbpn_sql=SqlQuery.find_or_create_by_name(
+'client_page_hits_by_page_name')
+
 #generate one chart for each possible combination
 pphbp_chart.series.each do |s|
   pphbp_chart.categories.each do |c|
     (1..5).each do |ch_i|
-      cphbpn_sql=SqlQuery.find_or_create_by_name(
-        'client_page_hits_by_page_name')
       cphbpn_chart=
         cphbpn_sql.charts.find_or_create_by_name_and_parent_id(
-        "#{cphbpn_sql.name}_#{s.name.underscore_all
-        }_#{c.name.underscore_all}_#{ch_i.to_s}",pphbp_chart.id)
+        "#{cphbpn_sql.name}_#{s.name.funderscore
+        }_#{c.name.funderscore}_#{ch_i.to_s}",pphbp_chart.id)
       #add parent parameters as well as series, category, rank specific
       {
         :period_1_start_date=>'2009-04-01',
@@ -93,13 +77,31 @@ pphbp_chart.series.each do |s|
   end
 end
 
-cphbpn_sql=SqlQuery.find_or_create_by_name(
-        'client_page_hits_by_page_name')
+
+#client page hits by page name color scheme array
+cphbpn_csa=Array.new
+
+#other schemes added name value style
+{
+  'blue_gradient_5'=>['06266F','2A4480','1240AB','4671D5','6C8CD5'],
+  'teal_gradient_5'=>['00665E','1D766F','009D91','33CEC3','5DCEC6'],
+  'green_gradient_5'=>['008110','259433','00C618','39E24D','6EE275'],
+  'orange_gradient_5'=>['A63600','BF5E30','FF5300','FF7E40','FFA073'],
+  'purple_gradient_5'=>['6C006C','7C1F7C','A600A6','D235D2','D25FD2']
+}.each do |n,ha|
+  cs=ColorScheme.find_or_create_by_name(n)
+  cphbpn_csa<<cs.name
+  ha.each do |h|
+    cs.items.find_or_create_by_hex_code(h)
+  end
+end
+
 #load first 5 from sql, apply color schemes, load to fcxml
 cs_i=0
 cphbpn_sql.charts[0..4].each do |ch|
 #apply color scheme
   ch.load_from_sql
+  ch.reload
   ch.add_color_scheme(cphbpn_csa[cs_i])
   ch.to_fcxml
   cs_i+=1

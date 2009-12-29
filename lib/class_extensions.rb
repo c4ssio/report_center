@@ -20,7 +20,7 @@ class Fixnum
   end
 end
 class String
-  def underscore_all
+  def funderscore
     #overrides underscore behavior
     #and underscores spaces in front of numbers too
     underscore.gsub(' ','_')
