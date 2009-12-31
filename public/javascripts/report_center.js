@@ -4,13 +4,6 @@
  */
 function getChildren(id,parent_name,new_s_name,new_c_name){
     //submit request to server
-    $.ajax({
-        data: 'series_name=' + new_s_name +
-        '&category_name=' + new_c_name,
-        dataType:'script',
-        type:'get',
-        url:'/charts/' + id + '/get_children'
-    })
 
     //replace series and category names in title panel
     var child_title_panel = $("#" + parent_name +"_child_title_panel")
@@ -24,9 +17,11 @@ function getChildren(id,parent_name,new_s_name,new_c_name){
     category_panel.text(new_c_name.toProperCase()); //amend display
     category_panel.attr('name',new_c_name)
 
-    var i = 1;
+    var rank = 0;
     //use parent name to cycle through child embeds
-    $("embed:[id^=" +parent_name + "_child]").each(function(){
+    var children = $("embed:[id^=" +parent_name + "_child]")
+    children.each(function(){
+        rank+=1;
         //replace chart data URL with itself modified for new series and category names
         //this.setDataURL('/data/' + chart_name + '_' + new_s_name + '_' + new_c_name + '_' + i + '.xml');
         //setDataURL has a bug for FC Free so I decided to directly replace the flashvars field
@@ -37,40 +32,50 @@ function getChildren(id,parent_name,new_s_name,new_c_name){
         var new_data_url ='dataURL='+ file_prefix +
         new_s_name.replace(' ','_') +'_' + new_c_name.replace(' ','_');
         var new_fv=fv.replace(curr_data_url,new_data_url);
-        $(this).attr('flashvars',new_fv);
-
-        //refresh the src to toggle chart refresh
+        
+        //get src to toggle chart refresh once request is completed
         var chObj= getChartFromId(this.id);
         var src = chObj.src;
+        //check if file is already generated
 
-        var file_url = curr_data_url.replace('dataURL=','') + '_' + i +'.xml'
-
-        //wait while file is not available
+        var file_url = new_data_url.replace('dataURL=','') + '_' + rank +'.xml'
         $.ajax({
             url:file_url,
-            type:'HEAD',
-            timeout:20000,
-            tryCount: 0,
-            retryLimit: 3,
-            complete:function(xhr){
-                if (xhr.status==200) {
-                    chObj.src=src;
-                    i+=1;
-                } else {
-                    var ajx = this;
-                    setTimeout(function(){
-                        $.ajax(ajx)
-                        },2000)
-                }
+            query_string: 'series_name=' + new_s_name +
+                  '&category_name=' + new_c_name +
+                  '&rank=' + rank,
+            new_fv:new_fv,
+            src:src,
+            chObj: chObj,
+            type:'get',
+            success: function(){
+                $(this.chObj).attr('flashvars',new_fv);
+                this.chObj.src=src;
+            },
+            error: function(){
+                $(this.chObj).parent().hide();
+                //show spinner
+                $(this.chObj).parent().parent().find('div.spinner').show();
+                $.ajax({
+                    data: this.query_string,
+                    dataType:'script',
+                    type:'get',
+                    url:'/charts/' + id + '/get_child',
+                    chObj:this.chObj,
+                    src: this.src,
+                    success:function(){
+                        $(this.chObj).attr('flashvars',new_fv);
+                        this.chObj.src=this.src;
+                        $(this.chObj).parent().parent().find('div.spinner').hide();
+                        $(this.chObj).parent().show()},
+                    error:function(){
+                        alert('Ajax error - Please check your internet connection.')
+                    }
+                })
             }
-        });
-        
-        
-
+        })
     }
-    )
-
-    ;
+    );
 
     function setChartDataURL(chart_id,new_URL){
         alert(chart_id + '-' + new_URL);

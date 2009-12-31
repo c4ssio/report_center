@@ -8,27 +8,22 @@ class ChartsController < ApplicationController
     
   end
 
-  def get_children
+  def get_child
     if request.xhr?
-      #take the parent chart, series name, and category name and use them to render appropriate xml files
-      children = self.params[:id].to_i.ch.children.find_by_params(
-        :series_name=>self.params[:series_name],:category_name=>self.params[:category_name])
-      #load sql, apply color schemes, and refresh the charts on the page
-      #cycle through 5 color schemes
-      color_scheme_array = ['blue_gradient_5','teal_gradient_5','green_gradient_5',
-        'orange_gradient_5','purple_gradient_5']
-      cs_i=0
-      children.each do |ch|
+      #check if xml is already loaded for this chart
+        ch_args = {:series_name=>self.params[:series_name],
+          :category_name=>self.params[:category_name]}
+        ch_args[:rank] = self.params[:rank].to_i if self.params[:rank]
+        #take the parent chart, series name, and category name and use them to render appropriate xml files
+        ch = self.params[:id].to_i.ch.children.find_by_params(ch_args).first
+      unless ch.file_path
+        #load sql, generate xml, and refresh the charts on the page
         #if chart has no datapoints
-        unless !ch.series.empty? && !ch.series.first.data_points.empty?
-        ch.load_from_sql
-        ch.add_color_scheme(color_scheme_array[cs_i])
+        unless ch.data_points.length>0
+          #load new changes,create xml file
+          ch.load_from_sql
         end
-        #load new changes, create xml file
-        ch.reload
-        ch.to_fcxml
-        cs_i+=1
-        cs_i=0 if cs_i==color_scheme_array.length
+        ch.reload;ch.to_fcxml
       end
       render :nothing => true
     end

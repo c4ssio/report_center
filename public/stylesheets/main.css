@@ -61,3 +61,14 @@ COLOR: black;
 TEXT-DECORATION:none;
 BACKGROUND-COLOR:#F2F2F2;
 }
+
+div.spinner
+{
+height:400px;
+}
+
+img.spinner
+{
+padding-top:130px;
+padding-left:40px;
+}

@@ -1,12 +1,16 @@
 class Chart < ActiveRecord::Base
   belongs_to :sql_query
   has_many :sql_params, :class_name=>'ChartSqlQueryParameter'
+  belongs_to :color_scheme
   belongs_to :parent, :class_name=>'Chart', :foreign_key=>:parent_id
   has_many :children, :class_name=>'Chart', :foreign_key=>:parent_id do
     def find_by_params(args)
-        self.select{|ch|
-        !args.collect{|n,v| ch.sql_params.find_by_name_and_text_value(n.to_s,v.to_s)}.include?(nil)
-        }
+      self.select{|ch|
+        !args.collect{|n,v| 
+          ch.sql_params.find_by_name_and_text_value(n.to_s,v.to_s) ||
+            ch.sql_params.find_by_name_and_number_value(n.to_s,v.to_s)
+        }.include?(nil)
+      }
     end
   end
 
@@ -97,21 +101,9 @@ class Chart < ActiveRecord::Base
     end
   end
 
-  def add_color_scheme(cs_name)
-    cs = ColorScheme.find_by_name(cs_name)
-    #takes a color scheme and applies all members to its series in order
-    color_array = cs.items.collect(&:hex_code)
-    c_i = 0
-      self.series.each do |s|
-        #if the series is named "other," skips it and applies a gray pattern
-        if s.name=='other'
-          new_color = 'C0C0C0' 
-        else
-          new_color = color_array[c_i]
-          c_i+=1
-        end
-        s.options.create_or_update_by_name_and_value('color',new_color)
-      end
+  def data_points
+    #defined this as a method since the collection associations were a pain to set up
+    return self.series.collect(&:data_points)
   end
 
   def load_from_sql
@@ -127,9 +119,15 @@ class Chart < ActiveRecord::Base
     #replace sql string parameters
     
     self.sql_params.each do |sqlp|
-      sql_str.gsub!("@#{sqlp.name}",
-        sqlp.text_value ? "'#{sqlp.text_value}'" : sqlp.number_value.to_s
-      )
+      if sqlp.text_value then
+        rep_str = sqlp.text_value
+      else
+        rep_str = 
+          sqlp.number_value.to_i == sqlp.number_value ?
+          sqlp.number_value.to_i.to_s :
+          sqlp.number_value.to_s
+      end
+      sql_str.gsub!("@#{sqlp.name}","'#{rep_str}'")
     end
     result = SqlQuery.execute(sql_str)
     #feed result set into 2d array, with
@@ -198,6 +196,7 @@ class Chart < ActiveRecord::Base
     #folder
     sorted_categories=nil
     sorted_data=nil
+    sorted_series=nil
     xml = Builder::XmlMarkup.new(:indent=>0)
     graph_options=Hash.new
     self.options.each{|cho|
@@ -214,11 +213,21 @@ class Chart < ActiveRecord::Base
           xml.category(category_options)
         }
       end
-      self.series.sort_by(&:order).each do |s|
+      sorted_series=self.series.sort_by(&:order)
+      ds_i = 0
+      sorted_series.each do |s|
         dataset_options=Hash.new
         s.options.each{|so|
           dataset_options[so.name.to_sym]=so.value.to_s
         }
+        #add color scheme hex code for color attribute
+        #unless series name is 'other' in which case use gray
+        if s.name=='other'
+          dataset_options[:color]='C0C0C0'
+        else
+          dataset_options[:color]=self.color_scheme.items[ds_i].hex_code
+          ds_i+=1
+        end
         xml.dataset(dataset_options) do
           set_options=Hash.new
           sorted_data = s.data_points.sort_by(&:order)
@@ -245,6 +254,22 @@ class Chart < ActiveRecord::Base
     chart_url
   end
 
+  def file_path
+    #this method returns the name of the file the chart has, or nil if there is none
+    query_name = self.sql_query.name
+    path = "/data/#{query_name}/#{query_name}"
+    if self.parent
+      series_name_param = self.sql_params.find_by_name('series_name')
+      category_name_param = self.sql_params.find_by_name('category_name')
+      rank_param = self.sql_params.find_by_name('rank')
+      path += "_#{series_name_param.text_value.funderscore}" if series_name_param
+      path += "_#{category_name_param.text_value.funderscore}" if category_name_param
+      path += "_#{rank_param.number_value}" if rank_param
+    end
+    path += ".xml"
+    puts path
+    File.exists?("#{Rails.root.to_s}/public#{path}" ) ? path : nil
+  end
 
 
 end
