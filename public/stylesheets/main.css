@@ -62,13 +62,15 @@ TEXT-DECORATION:none;
 BACKGROUND-COLOR:#F2F2F2;
 }
 
-div.spinner
-{
-height:400px;
-}
+/*spinner, loading*/
 
-img.spinner
-{
-padding-top:130px;
-padding-left:40px;
+div.spinner
+{height:400px;}
+
+img.spinner{padding-top:130px;padding-left:40px;}
+
+/*title for chart groups*/
+
+.chart_group_title_bar{
+    font-size: smaller; font-weight: bold; font-family: verdana;padding-left:25px;
 }
