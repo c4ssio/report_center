@@ -72,5 +72,14 @@ img.spinner{padding-top:130px;padding-left:40px;}
 /*title for chart groups*/
 
 .chart_group_title_bar{
-    font-size: smaller; font-weight: bold; font-family: verdana;padding-left:25px;
+    font-size: smaller; font-weight: bold;
+    font-family: verdana;padding-left:25px;
+}
+
+/*title or page*/
+.page_title{
+ font-size:50px;
+ font-family:cooper;
+ font-weight:bold;
+ padding-bottom:10px
 }

@@ -3,11 +3,10 @@
     <td width="33">
       &nbsp;
     </td>
-    <td align="left" valign="bottom">
+    <td align="center" valign="bottom" class="page_title">
+    Report Center
     </td>
 
-    <td align="right" valign="bottom">
-    </td>
     <td width="37">
       &nbsp;
     </td>
@@ -157,7 +156,7 @@
       </table>
 
        <%
-       #define series and category names manually for now
+       #define series and category names manually for first set of charts
        series_name = 'product 1'
        category_name = 'period 1'
        #load up first set of children using first series and category
@@ -184,7 +183,7 @@
                 "/data/#{ch.sql_query.name}/#{ch.name}.xml" , '',
                 "#{@main_chart.name}_child_#{ch_i}" ,
                 120 ,  370 , false ,  false do;end -%>
-              <div class="spinner" style="display:none"><%=image_tag 'loading.gif',:class=>'spinner'%><span class="spinner">&nbsp;Loading...<span><div>
+              <div class="spinner" style="display:none"><%=image_tag 'loading.gif',:class=>'spinner'%><span class="spinner">&nbsp;Loading...</span></div>
             </td>
           <%end%>
           <td width="110">
