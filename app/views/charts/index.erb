@@ -90,7 +90,7 @@
                 <td valign="top">
                   <table width="100%" align="center" cellpadding="0" cellspacing="0">
                     <tr>
-                      <td background="images/orangeTab.gif" colspan="3" align="left" height="26" width="405">
+                      <td colspan="3" align="left" height="26" width="405" style="background-color:darkblue;color:white;font-weight:bold">
                         <span class="textBoldDark">
                           &nbsp;&nbsp; Overview
                         </span>
@@ -105,8 +105,10 @@
                     </tr>
                     <tr height="27">
                       <td>
-                        The Report Center alows you to use charts to drill through their underlying data.
-                        Click on any of the bars on the chart to load charts for its constituent elements.  If the data has ben loaded already, the charts will appear instantly.
+                        The Report Center alows you to click on areas of charts to view constituents and underlying data.
+                        Click on any of the bars on the chart (genres by period)
+                        to load charts below it with client segments for different games in the selected genre.
+                        If the data has been loaded already, the charts will appear instantly.
                         Otherwise, the page will send a request to the server to load the data, which should take a few seconds per chart.
                         Once these charts are loaded, they will be instantly available to you on subsequent clicks.
 
@@ -132,17 +134,17 @@
 
        <%
        #define series and category names manually for first set of charts
-       series_name = 'product 1'
-       category_name = 'period 1'
+       series_name = @main_chart.series.first.name
+       category_name = @main_chart.categories.first.name
        #load up first set of children using first series and category
        mch_children = @main_chart.children.find_by_params(
          :series_name=>series_name,:category_name=>category_name)
        #get query name from first child
-       query_name = mch_children[0].sql_query.name
+       query_name = mch_children.first.sql_query.name
      %>
       <table width="790" align="left" cellpadding="0" cellspacing="0" border="0" style="Border-top:#EEEEEE 1px solid;">
-        <tr><td width="790" colspan="6" align="center">
-            <table id="<%="#{@main_chart.name}_child_title_panel"%>" class="chart_group_title_bar" width="790">
+        <tr><td width="790" colspan="6" align="left">
+            <table id="<%="#{@main_chart.name}_child_title_panel"%>" class="chart_group_title_bar">
               <tr><td><span class="chart_name" query_name="<%=query_name.funderscore%>"><%=query_name.titleize%></span></td></tr>
               <tr><td><span class="series_name" name="<%=series_name.funderscore%>"><%=series_name.titleize+','%></span>
                 <span class="category_name" name="<%=category_name.funderscore%>"><%=category_name.titleize%></span></td></tr>

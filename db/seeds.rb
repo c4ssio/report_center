@@ -1,7 +1,7 @@
 #add color schemes
-pphbp_cs = ColorScheme.find_or_create_by_name('blue_green_yellow_purple')
+dbg_cs = ColorScheme.find_or_create_by_name('blue_green_yellow_purple')
 ['0080C0','008040','FFFF00','800080','EB59CB'].each do |h|
-  pphbp_cs.items.find_or_create_by_hex_code(h)
+  dbg_cs.items.find_or_create_by_hex_code(h)
 end
 
 top_5_gradient = ColorSchemeGroup.find_or_create_by_name('top_5_gradient')
@@ -21,9 +21,9 @@ end
 
 #Product Page Hits By Period
 #generate query and parameters
-pphbp_sql=SqlQuery.find_or_create_by_name('product_page_hits_by_period')
+dbg_sql=SqlQuery.find_or_create_by_name('genre_downloads_by_period')
 
-pphbp_chart = pphbp_sql.charts.find_or_create_by_name('product_page_hits_by_period')
+dbg_chart = dbg_sql.charts.find_or_create_by_name('genre_downloads_by_period')
 
 {
   :period_1_start_date=>'2009-04-01',
@@ -32,48 +32,48 @@ pphbp_chart = pphbp_sql.charts.find_or_create_by_name('product_page_hits_by_peri
   :period_4_start_date=>'2009-04-22',
   :period_5_start_date=>'2009-04-29'
 }.each do |n,v|
-  pphbp_chart.sql_params.find_or_create_by_name_and_text_value(
+  dbg_chart.sql_params.find_or_create_by_name_and_text_value(
     n.to_s,v)
 end
 
-pphbp_chart.color_scheme_id=pphbp_cs.id
-pphbp_chart.save!
+dbg_chart.color_scheme_id=dbg_cs.id
+dbg_chart.save!
 
 #load data from sql file
-pphbp_chart.load_from_sql
+dbg_chart.load_from_sql
 
 {:showAlternateHGridColor=>"1", :bgcolor=>"F3f3f3",
-  :caption=>"Page Hits by Product, (Period 1 - Period 4)", :xAxisName=>"Period",
-  :alternateHGridColor=>"f8f8f8", :bgAlpha=>"70", :yAxisName=>"Page Hits",
+  :caption=>"Downloads by Genre, Period 1 - Period 4", :xAxisName=>"Period",
+  :alternateHGridColor=>"f8f8f8", :bgAlpha=>"70", :yAxisName=>"Downloads",
   :alternateHGridAlpha=>"60", :showColumnShadow=>"1", :showValues=>"0",
   :divlinecolor=>"c5c5c5", :numberPrefix=>"", :divLineAlpha=>"60",
   :decimalPrecision=>"0"}.each do |n,v|
-  pphbp_chart.options.find_or_create_by_name_and_value(n.to_s,v)
+  dbg_chart.options.find_or_create_by_name_and_value(n.to_s,v)
 end
 
 
-pphbp_chart.series.sort_by(&:order).each do |s|
+dbg_chart.series.sort_by(&:order).each do |s|
   s.data_points.each do |dp|
     dp.options.find_or_create_by_name_and_value('alpha','100')
   end
 end
 
 #Client Page Hits by Page Name
-#(generates 5 charts for each cat/series of pphbp)
+#(generates 5 charts for each cat/series of dbg)
 
-cphbpn_sql=SqlQuery.find_or_create_by_name(
-'client_page_hits_by_page_name')
+dbst5g_sql=SqlQuery.find_or_create_by_name(
+'segment_downloads_top_5_games')
 
 
 #generate one chart for each possible combination
 cs_i=0
-pphbp_chart.series.each do |s|
-  pphbp_chart.categories.each do |c|
+dbg_chart.series.each do |s|
+  dbg_chart.categories.each do |c|
     (1..5).each do |rank_i|
-      cphbpn_chart=
-        cphbpn_sql.charts.find_or_create_by_name_and_parent_id(
-        "#{cphbpn_sql.name}_#{s.name.funderscore
-        }_#{c.name.funderscore}_#{rank_i.to_s}",pphbp_chart.id)
+      dbst5g_chart=
+        dbst5g_sql.charts.find_or_create_by_name_and_parent_id(
+        "#{dbst5g_sql.name}_#{s.name.funderscore
+        }_#{c.name.funderscore}_#{rank_i.to_s}",dbg_chart.id)
       #add parent parameters as well as series, category as text
       {
         :period_1_start_date=>'2009-04-01',
@@ -85,12 +85,12 @@ pphbp_chart.series.each do |s|
         :category_name=>c.name,
         :rank=>rank_i.to_s
       }.each do |n,v|
-        cphbpn_chart.sql_params.find_or_create_by_name_and_text_value(
+        dbst5g_chart.sql_params.find_or_create_by_name_and_text_value(
           n.to_s,v)
       end
       #add color scheme
-      cphbpn_chart.color_scheme_id=top_5_gradient.color_schemes[cs_i].id
-      cphbpn_chart.save!
+      dbst5g_chart.color_scheme_id=top_5_gradient.color_schemes[cs_i].id
+      dbst5g_chart.save!
       #reset counter if at end of color scheme
       cs_i+=1
       cs_i=0 if cs_i==top_5_gradient.color_schemes.length
@@ -99,59 +99,12 @@ pphbp_chart.series.each do |s|
 end
 
 #load first 5 from sql, apply color schemes, load to fcxml
-cphbpn_sql.charts[0..4].each do |ch|
+dbst5g_sql.charts[0..4].each do |ch|
 #apply color scheme
   ch.load_from_sql
   ch.reload;ch.to_fcxml
   cs_i+=1
 end
 
-#load pphbp_chart w new child link xml from child charts
-pphbp_chart.reload;pphbp_chart.to_fcxml
-
-#Client Page Users
-
-#cpgu_chart = Chart.find_or_create_by_name_and_effective_date('client_page_users',Date.today)
-
-#cpgu_chart.options.add(
-#  {:xaxisname=>'Months', :yaxisname=>'Page Hits',
-#    :caption=>'Client Page Top Users', :lineThickness=>'1',
-#    :animation=>'1', :showNames=>'1', :alpha=>'100',
-#    :showLimits=>'1', :decimalPrecision=>'1', :rotateNames=>'1',
-#    :numDivLines=>'3', :limitsDecimalPrecision=>'0', :showValues=>'0'}
-#)
-#
-#['Client 1'].each do |c|
-#  cpgu_chart.categories.add(c).options.add(:showname=>'1')
-#end
-#
-#[cpgu_chart.series.add('User 1')].each do |s|
-#  s.options.add(:color=>'0080C0')
-#  [810,930,1110,1300,1890].each do |n|
-#    s.data_points.add(n).options.add(:alpha=>'100')
-#  end
-#end
-#[cpgu_chart.series.add('User 2')].each do |s|
-#  s.options.add(:color=>'008040')
-#  [380,390,420,490,900].each do |n|
-#    s.data_points.add(n).options.add(:alpha=>'100')
-#  end
-#end
-#[cpgu_chart.series.add('User 3')].each do |s|
-#  s.options.add(:color=>'FFFF00')
-#  [220,240,280,350,580].each do |n|
-#    s.data_points.add(n).options.add(:alpha=>'100')
-#  end
-#end
-#[cpgu_chart.series.add('User 4')].each do |s|
-#  s.options.add(:color=>'800080')
-#  [20,50,50,60,60].each do |n|
-#    s.data_points.add(n).options.add(:alpha=>'100')
-#  end
-#end
-#[cpgu_chart.series.add('User 5')].each do |s|
-#  s.options.add(:color=>'EB59CB')
-#  [10,10,20,20,20].each do |n|
-#    s.data_points.add(n).options.add(:alpha=>'100')
-#  end
-#end
+#load dbg_chart w new child link xml from child charts
+dbg_chart.reload;dbg_chart.to_fcxml

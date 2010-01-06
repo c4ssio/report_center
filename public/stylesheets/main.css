@@ -68,6 +68,7 @@ img.spinner{padding-top:130px;padding-left:40px;}
 .chart_group_title_bar{
     font-size: smaller; font-weight: bold;
     font-family: verdana;padding-left:25px;
+    margin-left:32px;background-color:darkblue;color:white;width:300px;
 }
 
 /*title or page*/
