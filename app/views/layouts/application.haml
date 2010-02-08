@@ -1,0 +1,12 @@
+!!! Transitional
+%html
+  %head
+    %title Ngmoco:) Dashboard
+    =stylesheet_link_tag "main", :media=>"all"
+    =javascript_include_tag :defaults
+    =javascript_include_tag "dashboard"
+  %body{:bgcolor=>"#eeeeee",
+        :rightmargin=>"0",
+        :bottommargin=>"0",
+        :leftmargin=>"0",
+        :topmargin=>"0"}=yield

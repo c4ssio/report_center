@@ -1,0 +1,227 @@
+%table{ :cellspacing => "0", :background => "images/PageBg.jpg", :border => "0", :align => "center", :width => "960", :cellpadding => "0" }
+  %tr{ :height => "50" }
+    %td{ :width => "33" } &nbsp;
+    %td.page_title ngmoco :) Dashboard
+  %tr{ :height => "30" }
+    %td{ :width => "33" }
+    %td{ :height => "22", :align => "center", :bgColor => "#EEEEEE", :valign => "middle", :colspan => "2" }
+    %td{ :width => "37" }
+  %tr
+    %td{ :width => "33" }
+    %td{ :height => "1", :bgColor => "#FFFFFF", :colspan => "2" }
+    %td{ :width => "37" }
+  %tr
+    %td{ :width => "33" }
+    %td{ :height => "1", :bgColor => "#EEEEEE", :colspan => "2" }
+    %td{ :width => "37" }
+  %tr
+    %td{ :width => "33" }
+    %td{ :colspan => "2" }
+      %table
+        %tr
+          %td
+            %table.metrics_and_filters
+              %tr.tab_group
+                %td.active_tab{:name=>"reach"}
+                  %span Reach
+                %td.inactive_tab{:name=>"engagement"}
+                  %span Engagement
+                %td.inactive_tab{:name=>"monetization"}
+                  %span Monetization
+                %td.inactive_tab{:name=>"virality"}
+                  %span Virality
+                %td.title_tab
+                  %span Label/Game/Sku
+                %td.title_tab
+                  %span Device
+                %td.title_tab
+                  %span Region
+                %td.title_tab
+                  %span Time Period
+              %tr
+                %td.active_metrics_list{:name=>"reach",:colspan=>"4"}
+                  %ul
+                    %li.metrics_group Daily Average Users (DAU)
+                    %ul
+                      %li.phase_1 Unique
+                      %li.phase_1 Cumulative
+                    %li.phase_1 Monthly Average Users (MAU)
+                    %li.phase_1{:title=>"Apple Downloads & IAP(In-App Purchases)"} Downloads & IAP
+                    %li.phase_1 Update Adoption %
+                    %li.phase_1 New Users
+                    %li.phase_2 Unlaunched / Pirated %
+                    %li.phase_1 Plus Signups
+                    %li.phase_2 Plus Signup %
+
+                %td.inactive_metrics_list{:name=>"engagement",:colspan=>"4"}
+                  %ul
+                    %li.phase_2 User Retention
+                    %li.phase_2 Play Rate %
+                    %li.phase_1{:title=>"Average Sessions per User"} Sessions / User
+                    %li.phase_3{:title=>"Average Session Duration"} Session Duration
+                    %li.phase_3{:title=>"Average Lifetime Play per User"} Lifetime Play / User
+                    %li.phase_3{:title=>"Average Lull between Sessions per User"} Time between Sessions
+
+                %td.inactive_metrics_list{:name=>"monetization",:colspan=>"4"}
+                  %ul
+                    %li.phase_1{:title=>"Paid DAU as % of Monetizable DAUs"} Paid DAU%
+                    %li.metrics_group Game Revenue
+                    %ul
+                      %li.phase_1 IAP
+                      %li.phase_1 Download
+                    %li.phase_1 Game Revenue / User (ARPU)
+                    %li.phase_1 Game Revenue / Paying User (ARPPU)
+                    %li.phase_3{:title=>"Value of User Engagement"} Game Revenue / Minute
+                    %li.phase_2 Ad Revenue
+                    %li.phase_3{:title=>"Average Lifetime Play per User"} Lifetime Profit / User
+
+                %td.inactive_metrics_list{:name=>"virality",:colspan=>"4"}
+                  %ul
+                    %li.phase_1
+                      ="% Users Sending Invites" #did in ruby due to display issue in netbeans haml viewer
+                    %li.phase_1 Invites Sent / User
+                    %li.phase_1{:title=>"% Invites Accepted of Invites Sent"} Invite Acceptance %
+                    %li.phase_1 Virality
+                    %li.phase_3 Facebook and Twitter Invites
+                %td.filter_list
+                  %ul.first_level
+                    %li.filter_group
+                      %input{:type=>'checkbox'} All
+                    %ul
+                      %li.filter_group
+                        %input{:type=>'checkbox'} Ngmoco:)
+                      %ul
+                        %li
+                          %input{:type=>'checkbox'} Godfinger
+                        %li
+                          %input{:type=>'checkbox'} We Rule
+                        %li.inactive_filter
+                          %input{:type=>'checkbox'} Eliminate
+                        %ul.inactive_filter
+                          %li
+                            %input{:type=>'checkbox'} SKU 1
+                          %li
+                            %input{:type=>'checkbox'} SKU 2
+                          %li
+                            %input{:type=>'checkbox'} SKU 3
+                          %li
+                            %input{:type=>'checkbox'} SKU 4
+                          %li
+                            %input{:type=>'checkbox'} SKU 5
+                          %li
+                            %input{:type=>'checkbox'} SKU 6
+                          %li
+                            %input{:type=>'checkbox'} SKU 7
+                          %li
+                            %input{:type=>'checkbox'} SKU 8
+                          %li
+                            %input{:type=>'checkbox'} SKU 9
+                          %li
+                            %input{:type=>'checkbox'} SKU 10
+                        %li.inactive_filter
+                          %input{:type=>'checkbox'} Touch Pets
+                        %li.inactive_filter
+                          %input{:type=>'checkbox'} Legacy
+                        %ul.inactive_filter
+                          %li
+                            %input{:type=>'checkbox'} Rolando
+                          %li
+                            %input{:type=>'checkbox'} Rolando2
+                      %li.inactive_filter
+                        %input{:type=>'checkbox'} Plus Publishing
+                        %ul
+                      %li.inactive_filter
+                        %input{:type=>'checkbox'} 3rd Parties
+                %td.filter_list
+                  %ul.first_level
+                    %li.filter_group
+                      %input{:type=>'checkbox'} All Devices
+                    %ul
+                      %li.filter_group
+                        %input{:type=>'checkbox'} IPhone
+                      %ul
+                        %li
+                          %input{:type=>'checkbox'} OS 2.1
+                        %li
+                          %input{:type=>'checkbox'} OS 2.3
+                        %li
+                          %input{:type=>'checkbox'} OS 3.0
+                        %li
+                          %input{:type=>'checkbox'} OS 4.0
+                      %li.filter_group
+                        %input{:type=>'checkbox'} IPod Touch
+                      %ul
+                        %li
+                          %input{:type=>'checkbox'} OS 1
+                        %li
+                          %input{:type=>'checkbox'} OS 2
+                        %li
+                          %input{:type=>'checkbox'} OS 3
+                        %li
+                          %input{:type=>'checkbox'} OS 4
+                      %li.inactive_filter
+                        %input{:type=>'checkbox'} IPod
+                      %ul.inactive_filter
+                        %li
+                          %input{:type=>'checkbox'} OS 1
+                        %li
+                          %input{:type=>'checkbox'} OS 2
+                        %li
+                          %input{:type=>'checkbox'} OS 3
+                        %li
+                          %input{:type=>'checkbox'} OS 4
+                %td.filter_list
+                  %ul.first_level
+                    %li.filter_group
+                      %input{:type=>'checkbox'} All Regions
+                    %ul
+                      %li
+                        %input{:type=>'checkbox'} North America
+                      %li
+                        %input{:type=>'checkbox'} Europe
+                      %li
+                        %input{:type=>'checkbox'} Asia
+                %td.filter_list
+                  .time_period_options
+                    %input{:type=>'radio', :name=>'time_period',:value=>'1d'} 1d
+                    %br
+                    %input{:type=>'radio', :name=>'time_period',:value=>'1w'} 1w
+                    %br
+                    %input{:type=>'radio', :name=>'time_period',:value=>'1m'} 1m
+                    %br
+                    %input{:type=>'radio', :name=>'time_period',:value=>'3m'} 3m
+                    %br
+                    %input{:type=>'radio', :name=>'time_period',:value=>'6m'} 6m
+                    %br
+                    %input{:type=>'radio', :name=>'time_period',:value=>'1y'} 1y
+    %td{ :width => "37" } &nbsp;
+  %tr
+    %td
+    %td
+      %table.query_panel
+        %tr
+          %td
+            %span Query Text (Query is generated here from the filters above. You can copy its contents to fire the same query later)
+        %tr
+          %td
+            %input.query_panel{:type=>'textarea'}
+        %tr
+          %td
+            %span Select filters above, or paste query text, then click Go to retrieve chart.
+            %input{:type=>'Submit',:value=>'Go'}
+  %tr
+    %td
+    %td{:colspan=>2}
+      %table.chart
+        %tr
+          %td
+            Chart
+  %tr
+    %td
+    %td
+      %a{:href=>'#'} Download CSV
+    %td
+  %tr
+    %td{ :width => "33" }
+    %td{ :height => "1", :bgColor => "#EEEEEE", :colspan => "2" }
+    %td{ :width => "37" }
